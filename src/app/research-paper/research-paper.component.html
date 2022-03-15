@@ -2,32 +2,52 @@
   <h1> Research Contributions </h1>
 
   <div class="mt-4 col-md-6 col-12">
-    <h4> {{researchPaper4.title}} </h4>
-    <div><span>Published Venue:</span> {{researchPaper4.venue}}</div>
-    <div><span>Date of Publication: </span> {{researchPaper4.year}} - {{researchPaper4.month}} </div>
-  </div>
-  <div class="mt-4 col-md-6 col-12">
-    <h4> {{researchPaper3.title}} </h4>
-    <div><span>Published Venue:</span> {{researchPaper3.venue}}</div>
-    <div><span>Date of Publication: </span> {{researchPaper3.year}} - {{researchPaper3.month}} </div>
-  </div>
-  <div class="mt-4 col-md-6 col-12">
-    <h4> {{researchPaper2.title}} </h4>
-    <div><span>Published Venue:</span> {{researchPaper2.venue}}</div>
-    <div><span>Date of Publication: </span> {{researchPaper2.year}} - {{researchPaper2.month}} </div>
-  </div>
-  <div class="mt-4 col-md-6 col-12">
-    <h4> {{researchPaper1.title}} </h4>
-    <div><span>Published Venue:</span> {{researchPaper1.venue}}</div>
-    <div><span>Date of Publication: </span> {{researchPaper1.year}} - {{researchPaper1.month}} </div>
-  </div>
-  <div class="mt-4 col-md-6 col-12">
-    <h4> {{researchPaper0.title}} </h4>
-    <div><span>Published Venue:</span> {{researchPaper0.venue}}</div>
-    <div><span>Date of Publication: </span> {{researchPaper0.year}} - {{researchPaper0.month}} </div>
+    <div class="card bg-light mb-3">
+      <img class="card-img-top" src="assets/research_paper_teasers/eurovis2022-teaser.png" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title"> {{researchPaper4.title}} (Under Review) </h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{researchPaper4.author0}},
+                                                  {{researchPaper4.author1}}, {{researchPaper4.author2}}</h6>
+        <p class="card-text"> {{researchPaper4.venue}}, {{researchPaper4.year}}</p>
+        <a href={{researchPaper4.doi}} role="button" class="btn btn-primary disabled">Paper</a>
+        <a href="https://observablehq.com/d/58f90c0a153bd534" class="btn btn-primary">Demo</a>
+      </div>
+    </div>
   </div>
 
+  <div class="mt-4 col-md-6 col-12">
+    <div class="card bg-light mb-3">
+      <img class="card-img-top" src="assets/research_paper_teasers/kicem2022-teaser.png" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title"> {{researchPaper3.title}} </h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{researchPaper3.author0}},
+                                                  {{researchPaper3.author1}}, {{researchPaper3.author2}}</h6>
+        <p class="card-text"> {{researchPaper3.venue}}, {{researchPaper3.year}}</p>
+        <a href={{researchPaper3.doi}} class="btn btn-primary">Paper</a>
+        <a href="" class="btn btn-primary disabled">Demo</a>
+      </div>
+    </div>
+  </div>
 
+  <div class="mt-4 col-md-6 col-12">
+    <div class="card bg-light mb-3">
+      <img class="card-img-top" src="assets/research_paper_teasers/kicem2021-teaser.png" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title"> {{researchPaper2.title}} </h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{researchPaper2.author0}},
+                                                  {{researchPaper2.author1}}</h6>
+        <p class="card-text"> {{researchPaper2.venue}}, {{researchPaper2.year}}</p>
+        <a href={{researchPaper2.doi}} class="btn btn-primary">Paper</a>
+        <a href="" class="btn btn-primary disabled">Demo</a>
+      </div>
+    </div>
+  </div>
+
+<!--  <div class="mt-4 col-md-6 col-12">-->
+<!--    <h4> {{researchPaper0.title}} </h4>-->
+<!--    <div><span>Published Venue:</span> {{researchPaper0.venue}}</div>-->
+<!--    <div><span>Date of Publication: </span> {{researchPaper0.year}} - {{researchPaper0.month}} </div>-->
+<!--  </div>-->
 
 </div>
 
