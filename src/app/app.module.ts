@@ -6,12 +6,14 @@ import { AppComponent } from './app.component';
 import { ResearchPaperComponent } from './research-paper/research-paper.component';
 import { BioComponent } from './bio/bio.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TimelineComponent } from './timeline/timeline.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ResearchPaperComponent,
     BioComponent,
+    TimelineComponent,
   ],
   imports: [
     BrowserModule,

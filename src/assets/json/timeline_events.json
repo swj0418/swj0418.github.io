@@ -1,0 +1,162 @@
+[
+  {
+    "evt_name": "Born",
+    "year": "1993-04",
+    "month": 4,
+    "place": "South Korea",
+    "place_precision": "Pohang",
+    "evt_category": "personal"
+  },
+  {
+    "evt_name": "Started Preschool",
+    "year": "1996-06",
+    "month": 6,
+    "place": "South Korea",
+    "place_precision": "Pohang",
+    "evt_category": "career"
+  },
+  {
+    "evt_name": "First Flight?",
+    "year": "1996-07",
+    "month": 7,
+    "place": "South Korea",
+    "place_precision": "Seoul",
+    "evt_category": "personal"
+  },
+  {
+    "evt_name": "Moved to New Jersey",
+    "year": "1997-08",
+    "month": 8,
+    "place": "United States",
+    "place_precision": "New Jersey",
+    "evt_category": "personal"
+  },
+  {
+    "evt_name": "Moved to Pohang",
+    "year": "1998-08",
+    "month": 8,
+    "place": "South Korea",
+    "place_precision": "Pohang",
+    "evt_category": "personal"
+  },
+  {
+    "evt_name": "Started Kindergarten",
+    "year": "1998-08",
+    "month": 8,
+    "place": "South Korea",
+    "place_precision": "Pohang",
+    "evt_category": "career"
+  },
+  {
+    "evt_name": "Started Elementary School",
+    "year": "1999-03",
+    "month": 3,
+    "place": "South Korea",
+    "place_precision": "Pohang",
+    "evt_category": "career"
+  },
+  {
+    "evt_name": "LA Trip",
+    "year": "2001-07",
+    "month": 7,
+    "place": "United States",
+    "place_precision": "Los Angeles",
+    "evt_category": "personal"
+  },
+  {
+    "evt_name": "Hawaii Trip",
+    "year": "2002-07",
+    "month": 7,
+    "place": "United States",
+    "place_precision": "Hawaii",
+    "evt_category": "personal"
+  },
+  {
+    "evt_name": "Jeju Trip",
+    "year": "2002-09",
+    "month": 9,
+    "place": "South Korea",
+    "place_precision": "Jeju Island",
+    "evt_category": "personal"
+  },
+  {
+    "evt_name": "New York Trip",
+    "year": "2003-01",
+    "month": 1,
+    "place": "United States",
+    "place_precision": "New York",
+    "evt_category": "personal"
+  },
+  {
+    "evt_name": "Atlanta Trip",
+    "year": "2003-07",
+    "month": 7,
+    "place": "United States",
+    "place_precision": "Atlanta",
+    "evt_category": "personal"
+  },
+  {
+    "evt_name": "Guam Trip",
+    "year": "2004-01",
+    "month": 1,
+    "place": "United States",
+    "place_precision": "Guam",
+    "evt_category": "personal"
+  },
+  {
+    "evt_name": "Hawaii Trip",
+    "year": "2004-08",
+    "month": 8,
+    "place": "United States",
+    "place_precision": "Hawaii",
+    "evt_category": "personal"
+  },
+  {
+    "evt_name": "Moved to Los Angeles",
+    "year": "2005-01",
+    "month": 1,
+    "place": "United States",
+    "place_precision": "Los Angeles",
+    "evt_category": "personal"
+  },
+  {
+    "evt_name": "Moved to Pohang",
+    "year": "2006-03",
+    "month": 3,
+    "place": "South Korea",
+    "place_precision": "Pohang",
+    "evt_category": "personal"
+  },
+  {
+    "evt_name": "Started Middle School",
+    "year": "2006-03",
+    "month": 3,
+    "place": "South Korea",
+    "place_precision": "Pohang",
+    "evt_category": "career"
+  },
+  {
+    "evt_name": "Started High School",
+    "year": "2009-03",
+    "month": 3,
+    "place": "South Korea",
+    "place_precision": "Pohang",
+    "evt_category": "career"
+  },
+  {
+    "evt_name": "Started University",
+    "year": "2012-03",
+    "month": 3,
+    "place": "South Korea",
+    "place_precision": "Pohang",
+    "evt_category": "career"
+  },
+  {
+    "evt_name": "Europe Tour",
+    "year": "2012-07",
+    "month": 7,
+    "place": "United Kingdom",
+    "place_precision": "London",
+    "evt_category": "career"
+  }
+]
