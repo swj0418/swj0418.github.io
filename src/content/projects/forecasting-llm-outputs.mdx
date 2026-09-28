@@ -1,0 +1,18 @@
+---
+title: Forecasting LLM Outputs from Hidden States
+subtitle: Bayesian forecasting from pre-generation hidden states
+summary: Predicting the distribution of an LLM’s structured outputs before it generates a single token.
+theme: llm-behavior
+year: 2026
+status: under-review
+featured: true
+order: 2
+---
+
+## Overview
+
+Sampling an LLM many times is the usual way to see the spread of what it might produce — and it's expensive. This project introduces a **Bayesian framework that forecasts an LLM's output distribution over structured Vega-Lite specifications from pre-generation hidden states**, quantifying how much of the sampling variability is recoverable without repeated generation.
+
+Across model scales, **channel binding** — which data fields get mapped to which visual encodings — emerges as the main bottleneck for forecasting.
+
+*The paper is under review; more details and code will follow.*

@@ -1,0 +1,222 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Demo from '../../components/Demo.astro';
+import PubItem from '../../components/PubItem.astro';
+import { themes } from '../../config';
+import { pubsForProject } from '../../data/publications';
+
+export async function getStaticPaths() {
+  const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+  return projects.map((project, i) => ({
+    params: { slug: project.id },
+    props: { project, next: projects[(i + 1) % projects.length] },
+  }));
+}
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  next: CollectionEntry<'projects'>;
+}
+
+const { project, next } = Astro.props;
+const d = project.data;
+const { Content } = await render(project);
+const theme = themes.find((t) => t.id === d.theme)!;
+const pubs = pubsForProject(project.id);
+
+const linkDefs: [keyof typeof d.links, string][] = [
+  ['demo', 'Live demo'],
+  ['paper', 'Paper'],
+  ['arxiv', 'arXiv'],
+  ['code', 'Code'],
+  ['video', 'Video'],
+];
+const links = linkDefs.filter(([k]) => d.links[k]).map(([k, label]) => ({ label, href: d.links[k]!, primary: k === 'demo' }));
+const statusText: Record<string, string> = {
+  published: 'Published',
+  'under-review': 'Under review',
+  ongoing: 'Ongoing',
+  internship: 'Internship project',
+};
+---
+
+<Base title={d.title} description={d.summary} image={d.cover ?? '/og.png'}>
+  <article>
+    <header class="page-head wrap">
+      <a class="back mono" href="/projects/">← projects</a>
+      <p class="eyebrow">{theme.title}</p>
+      <h1>{d.title}</h1>
+      {d.subtitle && <p class="subtitle">{d.subtitle}</p>}
+      <p class="lede">{d.summary}</p>
+      {
+        links.length > 0 && (
+          <div class="links">
+            {links.map((l) => (
+              <a class:list={['btn', { primary: l.primary }]} href={l.href} rel="noopener">
+                {l.label} ↗
+              </a>
+            ))}
+          </div>
+        )
+      }
+    </header>
+
+    {
+      (d.demo || d.cover) && (
+        <div class="wrap media">
+          {d.demo ? <Demo demo={d.demo} fallbackTitle={d.title} /> : <img class="cover" src={d.cover} alt={d.coverAlt ?? ''} />}
+        </div>
+      )
+    }
+
+    <div class="wrap layout">
+      <div class="prose">
+        <Content />
+      </div>
+      <aside class="facts mono" aria-label="Project facts">
+        <dl>
+          <div><dt>status</dt><dd>{statusText[d.status]}</dd></div>
+          {d.venues.length > 0 && d.status !== 'under-review' && <div><dt>venues</dt><dd>{d.venues.join(', ')}</dd></div>}
+          <div><dt>year</dt><dd>{d.year}</dd></div>
+          <div><dt>theme</dt><dd><a href={`/projects/#${theme.id}`}>{theme.title}</a></dd></div>
+        </dl>
+      </aside>
+    </div>
+
+    {
+      pubs.length > 0 && (
+        <section class="wrap pubs">
+          <h2 class="eyebrow">Publications</h2>
+          <div>
+            {pubs.map((p) => (
+              <PubItem pub={p} showProject={false} />
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <nav class="wrap next" aria-label="Next project">
+      <a href={`/projects/${next.id}/`}>
+        <span class="eyebrow">Next project</span>
+        <span class="t">{next.data.title} →</span>
+      </a>
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .back {
+    display: inline-block;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+  }
+  .back:hover {
+    color: var(--accent-strong);
+  }
+  .page-head::after {
+    display: none;
+  }
+  .subtitle {
+    margin-top: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+  .media {
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+  }
+  .cover {
+    width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .layout {
+    padding-top: 0.5rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 15rem;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+  .prose > :global(h2:first-child) {
+    margin-top: 0;
+  }
+  .facts {
+    position: sticky;
+    top: 5.5rem;
+    font-size: 0.78rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.05rem;
+    background: var(--bg-elev);
+  }
+  .facts dl {
+    margin: 0;
+    display: grid;
+    gap: 0.65rem;
+  }
+  .facts dt {
+    color: var(--text-faint);
+  }
+  .facts dd {
+    margin: 0.1rem 0 0;
+    color: var(--text);
+    line-height: 1.45;
+  }
+  .facts a {
+    text-decoration: none;
+  }
+  .pubs {
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+  }
+  .pubs h2 {
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0.2rem;
+  }
+  .next {
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+  }
+  .next a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 1.25rem 1.3rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    transition: border-color 160ms ease;
+  }
+  .next a:hover {
+    border-color: var(--accent-line);
+    color: inherit;
+  }
+  .next .t {
+    font-size: 1.1rem;
+    font-weight: 560;
+  }
+  @media (max-width: 860px) {
+    .layout {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .facts {
+      position: static;
+      order: -1;
+    }
+    .facts dl {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

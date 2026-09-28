@@ -1,0 +1,83 @@
+---
+import Base from '../layouts/Base.astro';
+import { teaching } from '../data/teaching';
+---
+
+<Base title="Teaching" description="Teaching experience of Sangwon Jeong.">
+  <header class="page-head wrap">
+    <p class="eyebrow">Teaching</p>
+    <h1>Teaching</h1>
+    <p class="lede">Courses I have taught or supported as a teaching assistant.</p>
+  </header>
+
+  <div class="wrap">
+    <ol class="list">
+      {
+        teaching.map((t) => (
+          <li>
+            <div class="when mono">{t.term}</div>
+            <div class="what">
+              <h2>
+                {t.url ? <a href={t.url}>{t.course}</a> : t.course}
+                {t.code && <span class="code mono">{t.code}</span>}
+              </h2>
+              <p>
+                {t.role} · {t.institution}
+                {t.instructor && <> · Instructor: {t.instructor}</>}
+              </p>
+              {t.note && <p class="note">{t.note}</p>}
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</Base>
+
+<style>
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: 1.5rem;
+    padding-block: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .when {
+    font-size: 0.8rem;
+    color: var(--accent);
+    padding-top: 0.25rem;
+  }
+  h2 {
+    font-size: 1.1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem 0.75rem;
+  }
+  h2 a {
+    text-decoration-color: var(--accent-line);
+  }
+  .code {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--text-faint);
+  }
+  p {
+    color: var(--text-muted);
+    margin-top: 0.35rem;
+  }
+  .note {
+    font-size: 0.92rem;
+  }
+  @media (max-width: 600px) {
+    li {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.4rem;
+    }
+  }
+</style>

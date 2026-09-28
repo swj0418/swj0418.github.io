@@ -1,0 +1,36 @@
+---
+// Renders a project's `demo` frontmatter block.
+import YouTube from './YouTube.astro';
+import DemoFrame from './DemoFrame.astro';
+import DemoVideo from './DemoVideo.astro';
+
+interface Props {
+  demo: {
+    kind: 'youtube' | 'video' | 'iframe';
+    src: string;
+    title?: string;
+    poster?: string;
+    aspect?: string;
+    caption?: string;
+    live?: boolean;
+  };
+  fallbackTitle: string;
+}
+const { demo, fallbackTitle } = Astro.props;
+const title = demo.title ?? fallbackTitle;
+---
+
+<div class="demo-block">
+  {demo.kind === 'youtube' && <YouTube id={demo.src} title={title} />}
+  {demo.kind === 'video' && <DemoVideo src={demo.src} poster={demo.poster} title={title} aspect={demo.aspect} />}
+  {demo.kind === 'iframe' && <DemoFrame src={demo.src} title={title} aspect={demo.aspect} poster={demo.poster} />}
+  {demo.caption && <p class="cap">{demo.caption}</p>}
+</div>
+
+<style>
+  .cap {
+    margin-top: 0.7rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+</style>

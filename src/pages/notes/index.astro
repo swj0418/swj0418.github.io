@@ -1,0 +1,84 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { fmtDate } from '../../lib/format';
+
+const notes = (await getCollection('notes'))
+  .filter((n) => !n.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<Base title="Notes" description="Notes and write-ups by Sangwon Jeong.">
+  <header class="page-head wrap">
+    <p class="eyebrow">Notes</p>
+    <h1>Notes</h1>
+    <p class="lede">Short write-ups on interpretability, LLM evaluation, and building research tools.</p>
+  </header>
+  <div class="wrap">
+    {
+      notes.length === 0 ? (
+        <p class="empty mono">No notes published yet.</p>
+      ) : (
+        <ol class="list">
+          {notes.map((n) => (
+            <li>
+              <time class="mono" datetime={n.data.date.toISOString()}>
+                {fmtDate(n.data.date)}
+              </time>
+              <div>
+                <h2>
+                  <a href={`/notes/${n.id}/`}>{n.data.title}</a>
+                </h2>
+                <p>{n.data.description}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      )
+    }
+  </div>
+</Base>
+
+<style>
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    display: grid;
+    grid-template-columns: 8rem minmax(0, 1fr);
+    gap: 1.5rem;
+    padding-block: 1.4rem;
+    border-bottom: 1px solid var(--border);
+  }
+  time {
+    font-size: 0.78rem;
+    color: var(--text-faint);
+    padding-top: 0.25rem;
+  }
+  h2 {
+    font-size: 1.1rem;
+  }
+  h2 a {
+    text-decoration: none;
+  }
+  h2 a:hover {
+    text-decoration: underline;
+  }
+  p {
+    color: var(--text-muted);
+    margin-top: 0.3rem;
+  }
+  .empty {
+    padding-block: 2rem;
+    color: var(--text-faint);
+    font-size: 0.85rem;
+  }
+  @media (max-width: 600px) {
+    li {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.3rem;
+    }
+  }
+</style>

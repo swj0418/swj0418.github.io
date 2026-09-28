@@ -1,0 +1,31 @@
+---
+title: Assessing Disentanglement in GANs
+subtitle: Interactively assessing disentanglement in GANs
+summary: An interactive approach for judging whether a latent direction changes one attribute — or quietly changes many.
+theme: generative-interpretability
+venues: [EuroVis 2022]
+year: 2022
+featured: true
+order: 4
+cover: /images/projects/disentanglement.jpg
+coverAlt: Linked views showing a latent-code projection, a regression view, and per-attribute charts.
+coverPosition: 0% 0%
+links:
+  paper: https://doi.org/10.1111/cgf.14524
+  demo: https://observablehq.com/@swj0418/slow-walker
+demo:
+  kind: iframe
+  src: https://observablehq.com/embed/@swj0418/slow-walker
+  title: Interactive notebook on Observable
+  aspect: 4 / 3
+  poster: /images/projects/disentanglement.jpg
+  live: true
+---
+
+{/* TODO(Sangwon): expand with the key finding and your favorite example walk. */}
+
+## Overview
+
+Walking along a direction in a GAN's latent space should ideally change a single attribute. In practice, directions are often entangled: a direction meant for one attribute can drag others along with it. This work provides linked, interactive views — attribute charts, a regression view, and a projection of latent codes — for assessing how well a direction isolates the attribute it's meant to control, walk by walk.
+
+The demo above is the live Observable notebook that accompanies the paper.

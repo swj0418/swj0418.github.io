@@ -1,0 +1,48 @@
+---
+// Self-hosted demo clip: muted, looping, autoplays only if the visitor allows motion.
+// Keep clips short (15–60 s), 1280–1600 px wide, H.264 MP4 (+ optional WebM), ideally < 8 MB.
+interface Props {
+  src: string;
+  webm?: string;
+  poster?: string;
+  title: string;
+  aspect?: string;
+}
+const { src, webm, poster, title, aspect = '16 / 9' } = Astro.props;
+---
+
+<figure class="dv" style={`aspect-ratio:${aspect}`}>
+  <video muted loop playsinline preload="metadata" poster={poster} aria-label={title} data-autoplay controls>
+    {webm && <source src={webm} type="video/webm" />}
+    <source src={src} type="video/mp4" />
+  </video>
+</figure>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduce) {
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        const v = e.target as HTMLVideoElement;
+        if (e.isIntersecting) v.play().catch(() => {});
+        else v.pause();
+      }
+    }, { threshold: 0.35 });
+    document.querySelectorAll<HTMLVideoElement>('video[data-autoplay]').forEach((v) => io.observe(v));
+  }
+</script>
+
+<style>
+  .dv {
+    margin: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: #000;
+  }
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>

@@ -1,0 +1,318 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import PubItem from '../components/PubItem.astro';
+import { site, themes } from '../config';
+import { news } from '../data/news';
+import { publications } from '../data/publications';
+import { fmtNewsDate } from '../lib/format';
+
+const projects = await getCollection('projects');
+const featured = projects.filter((p) => p.data.featured).sort((a, b) => a.data.order - b.data.order);
+const countByTheme = (id: string) => projects.filter((p) => p.data.theme === id).length;
+const recentPubs = publications.filter((p) => p.type !== 'regional' && p.type !== 'thesis').slice(0, 4);
+---
+
+<Base>
+  <section class="hero wrap">
+    <div class="intro">
+      <p class="eyebrow">PhD candidate · Vanderbilt CS</p>
+      <h1>{site.name}</h1>
+      <p class="tagline">{site.tagline}</p>
+      <div class="bio">
+        {site.bio.map((p) => <p>{p}</p>)}
+      </div>
+      <div class="cta">
+        <a class="btn primary" href={site.links.cv}>CV (pdf)</a>
+        <a class="btn" href={`mailto:${site.email}`}>Email</a>
+        <a class="btn" href={site.links.scholar}>Scholar</a>
+        <a class="btn" href={site.links.github}>GitHub</a>
+        <a class="btn" href={site.links.linkedin}>LinkedIn</a>
+      </div>
+    </div>
+
+    <aside class="panel mono" aria-label="At a glance">
+      {site.photo && <img class="photo" src={site.photo} alt={`Portrait of ${site.name}`} width="400" height="400" />}
+      <dl>
+        <div><dt>role</dt><dd>PhD candidate, CS</dd></div>
+        <div><dt>where</dt><dd>Vanderbilt University</dd></div>
+        <div><dt>advisor</dt><dd>Matthew Berger</dd></div>
+        <div><dt>focus</dt><dd>interpretability · LLM evaluation · visual analytics</dd></div>
+        <div><dt>venues</dt><dd>TVCG · VIS · EuroVis</dd></div>
+        {
+          site.jobMarket.show && (
+            <div class="status">
+              <dt>status</dt>
+              <dd>
+                <span class="pulse" aria-hidden="true" />
+                {site.jobMarket.text}
+              </dd>
+            </div>
+          )
+        }
+      </dl>
+    </aside>
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <h2 class="eyebrow">Selected work</h2>
+      <a class="more" href="/projects/">all projects →</a>
+    </div>
+    <div class="grid">
+      {featured.map((p) => <ProjectCard project={p} size="lg" />)}
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <h2 class="eyebrow">Research themes</h2>
+    </div>
+    <div class="themes">
+      {
+        themes.map((t, i) => (
+          <a class="theme" href={`/projects/#${t.id}`}>
+            <span class="idx mono">0{i + 1}</span>
+            <h3>{t.title}</h3>
+            <p>{t.blurb}</p>
+            <span class="count mono">
+              {countByTheme(t.id)} project{countByTheme(t.id) === 1 ? '' : 's'} →
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section wrap split">
+    <div>
+      <div class="section-head">
+        <h2 class="eyebrow">News</h2>
+      </div>
+      <ol class="news">
+        {
+          news.slice(0, 7).map((n) => (
+            <li>
+              <time class="mono" datetime={n.date}>{fmtNewsDate(n.date)}</time>
+              <span set:html={n.text} />
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+    <div>
+      <div class="section-head">
+        <h2 class="eyebrow">Recent publications</h2>
+        <a class="more" href="/publications/">all publications →</a>
+      </div>
+      <div class="pubs">
+        {recentPubs.map((p) => <PubItem pub={p} compact />)}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 20rem);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: start;
+    padding-top: clamp(3rem, 8vw, 6rem);
+    padding-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+  .intro .eyebrow {
+    margin-bottom: 0.9rem;
+  }
+  h1 {
+    font-size: var(--step-4);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+  .tagline {
+    margin-top: 1rem;
+    font-size: clamp(1.2rem, 1rem + 0.9vw, 1.55rem);
+    line-height: 1.4;
+    letter-spacing: -0.012em;
+    color: var(--text);
+    max-width: 30ch;
+  }
+  .bio {
+    margin-top: 1.5rem;
+    display: grid;
+    gap: 0.9rem;
+    color: var(--text-muted);
+    max-width: 62ch;
+  }
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.75rem;
+  }
+
+  .panel {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-elev);
+    padding: 1.1rem 1.15rem;
+    font-size: 0.78rem;
+    margin-top: 0.4rem;
+  }
+  .photo {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    filter: grayscale(0.15);
+  }
+  dl {
+    margin: 0;
+    display: grid;
+    gap: 0.6rem;
+  }
+  dl > div {
+    display: grid;
+    grid-template-columns: 4.6rem minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+  dt {
+    color: var(--text-faint);
+  }
+  dd {
+    margin: 0;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .status {
+    padding-top: 0.75rem;
+    margin-top: 0.2rem;
+    border-top: 1px dashed var(--border-strong);
+  }
+  .status dd {
+    color: var(--accent);
+  }
+  .pulse {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-right: 0.45rem;
+    vertical-align: 0.05em;
+    box-shadow: 0 0 0 0 var(--accent-line);
+    animation: pulse 2.4s ease-out infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 var(--accent-line); }
+    70%, 100% { box-shadow: 0 0 0 7px transparent; }
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .themes {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .theme {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.2rem 1.2rem 1.1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    background: linear-gradient(180deg, var(--bg-elev), transparent);
+    transition: border-color 160ms ease;
+  }
+  .theme:hover {
+    border-color: var(--accent-line);
+    color: inherit;
+  }
+  .idx {
+    font-size: 0.72rem;
+    color: var(--accent);
+  }
+  .theme h3 {
+    font-size: 1.02rem;
+  }
+  .theme p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+  .count {
+    margin-top: auto;
+    padding-top: 0.4rem;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+  .theme:hover .count {
+    color: var(--accent-strong);
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(2rem, 5vw, 4rem);
+  }
+  .news {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .news li {
+    display: grid;
+    grid-template-columns: 5.2rem minmax(0, 1fr);
+    gap: 1rem;
+    padding-block: 0.7rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+  .news li:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .news time {
+    font-size: 0.75rem;
+    color: var(--text-faint);
+    padding-top: 0.15rem;
+    white-space: nowrap;
+  }
+  .news :global(a) {
+    color: var(--text);
+  }
+  .pubs :global(.pub:first-child) {
+    padding-top: 0;
+  }
+
+  @media (max-width: 900px) {
+    .hero {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .panel {
+      max-width: 28rem;
+    }
+    .themes {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .split {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 700px) {
+    .grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

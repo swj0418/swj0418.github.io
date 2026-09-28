@@ -1,0 +1,44 @@
+---
+title: Concept Lens
+subtitle: Visual comparison and evaluation of generative model manipulations
+summary: A visual analytics system for seeing which semantic edits a generative model supports — and for which inputs those edits actually hold.
+theme: generative-interpretability
+venues: [IEEE TVCG 2025, IEEE VIS 2023]
+year: 2025
+featured: true
+order: 1
+cover: /images/projects/concept-lens.jpg
+coverAlt: Concept Lens interface — a concept hierarchy along the top, a code hierarchy on the left, and a grid of edited tiger images.
+coverPosition: 0% 0%
+links:
+  code: https://github.com/swj0418/concept-lens
+  video: https://www.youtube.com/watch?v=vGjovECYL2U
+demo:
+  kind: youtube
+  src: vGjovECYL2U
+  title: Concept Lens — IEEE VIS 2023 presentation
+---
+
+import Figure from '../../components/Figure.astro';
+
+## The problem
+
+Latent directions in generative models promise controllable edits — *add spots*, *close the eyes* — but a direction rarely does the same thing to every image. An edit that works cleanly on one group of inputs can be entangled with something else, or do nothing at all, on another. Evaluating a manipulation method means seeing both sides at once: the edits and the inputs they're applied to.
+
+## How it works
+
+Concept Lens pairs two hierarchies with an image grid:
+
+- **Concepts** — edit directions, clustered by the changes they produce.
+- **Codes** — latent inputs, clustered by what they generate.
+- **A grid** of generated images for any selected codes (rows) × concepts (columns).
+
+Hierarchy nodes encode the **consistency** and **magnitude** of each edit, so directions that act uniformly stand apart from ones whose effect depends on the input. Brushing a subset of codes and re-clustering the concept hierarchy surfaces edits that are consistent for that subset.
+
+<Figure src="/images/projects/concept-lens.jpg" alt="Concept Lens overview with concept hierarchy (A), code hierarchy (B), and image grid (C)." caption="(A) concept hierarchy, (B) code hierarchy, (C) image grid for the selected codes × concepts. Node color encodes edit magnitude and inconsistency." />
+
+## An example
+
+A *closed eyes* concept applies to most cat images — except a group of kittens, which in the dataset rarely have their eyes closed. For another group of cats, the same direction is entangled with *mouth open*. These are the kinds of input-dependent behaviors that aggregate metrics hide.
+
+The TVCG version broadens the system to compare and evaluate manipulations produced by different direction-finding methods — SeFA, GANSpace, vector arithmetic, and supervised (SVM) directions.

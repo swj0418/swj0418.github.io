@@ -1,0 +1,39 @@
+---
+// Deterministic dot-field used when a project has no cover image yet.
+// Decorative only — it carries no data.
+interface Props {
+  seed: string;
+  class?: string;
+}
+const { seed, class: cls } = Astro.props;
+
+let h = 2166136261;
+for (const ch of seed) h = Math.imul(h ^ ch.charCodeAt(0), 16777619) >>> 0;
+const rand = () => ((h = Math.imul(h ^ (h >>> 15), 2246822507) >>> 0), (h % 10000) / 10000);
+
+const cols = 32;
+const rows = 20;
+const f1 = 0.18 + rand() * 0.25;
+const f2 = 0.2 + rand() * 0.3;
+const p1 = rand() * Math.PI * 2;
+const p2 = rand() * Math.PI * 2;
+const cx = 6 + rand() * 20;
+const cy = 4 + rand() * 12;
+
+const dots: { x: number; y: number; r: number; o: number }[] = [];
+for (let j = 0; j < rows; j++) {
+  for (let i = 0; i < cols; i++) {
+    const wave = 0.5 + 0.5 * Math.sin(i * f1 + p1) * Math.cos(j * f2 + p2);
+    const d = Math.hypot(i - cx, (j - cy) * 1.4) / 14;
+    const v = Math.max(0, Math.min(1, wave * 0.75 + Math.exp(-d * d) * 0.55 - 0.18));
+    dots.push({ x: 5 + i * 10, y: 5 + j * 10, r: 0.5 + v * v * 3.6, o: 0.12 + v * 0.88 });
+  }
+}
+---
+
+<svg class={cls} viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+  <rect width="320" height="200" fill="var(--surface)"></rect>
+  <g fill="var(--accent)">
+    {dots.map((d) => <circle cx={d.x} cy={d.y} r={d.r.toFixed(2)} opacity={d.o.toFixed(2)} />)}
+  </g>
+</svg>

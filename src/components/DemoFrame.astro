@@ -1,0 +1,123 @@
+---
+// Embeds an interactive demo. Nothing loads until the visitor clicks "Launch",
+// so heavy demos never slow the page down.
+//
+//  - A static build of one of your systems:  src="/demos/concept-lens/"  (files in public/demos/concept-lens/)
+//  - An Observable notebook:                  src="https://observablehq.com/embed/@user/notebook"
+//  - A Hugging Face Space:                    src="https://<user>-<space>.hf.space"
+interface Props {
+  src: string;
+  title: string;
+  aspect?: string;
+  poster?: string;
+  openHref?: string;
+}
+const { src, title, aspect = '16 / 10', poster, openHref } = Astro.props;
+const external = /^https?:/.test(openHref ?? src);
+const openUrl = (openHref ?? src).replace('observablehq.com/embed/', 'observablehq.com/');
+---
+
+<div class="demo" style={`aspect-ratio:${aspect}`} data-src={src} data-title={title}>
+  {poster && <img class="poster" src={poster} alt="" loading="lazy" decoding="async" />}
+  <div class="launch">
+    <div class="card">
+      <span class="chip accent"><span class="dot"></span>live demo</span>
+      <p class="t">{title}</p>
+      <div class="row">
+        <button type="button" class="btn primary" data-launch>Launch demo</button>
+        <a class="btn" href={openUrl} target={external ? '_blank' : undefined} rel="noopener">Open in new tab ↗</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.demo[data-src]').forEach((el) => {
+    el.querySelector('[data-launch]')?.addEventListener('click', () => {
+      const iframe = document.createElement('iframe');
+      iframe.src = el.dataset.src ?? '';
+      iframe.title = el.dataset.title ?? 'Interactive demo';
+      iframe.loading = 'eager';
+      iframe.allow = 'fullscreen; clipboard-write';
+      iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-forms allow-downloads');
+      el.replaceChildren(iframe);
+      el.classList.add('running');
+    });
+  });
+</script>
+
+<style>
+  .demo {
+    position: relative;
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 1px 1px, var(--border-strong) 1px, transparent 0) 0 0 / 18px 18px,
+      var(--bg-elev);
+  }
+  .demo.running {
+    background: #fff;
+  }
+  .poster {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top left;
+    opacity: 0.55;
+    filter: saturate(0.7);
+  }
+  .demo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, color-mix(in srgb, var(--bg) 55%, transparent), color-mix(in srgb, var(--bg) 20%, transparent));
+    pointer-events: none;
+  }
+  .demo.running::after {
+    display: none;
+  }
+  .launch {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 1.4rem 1.5rem;
+    text-align: center;
+    background: color-mix(in srgb, var(--bg-elev) 92%, transparent);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 10px 40px rgb(0 0 0 / 0.25);
+  }
+  .t {
+    font-size: 1.05rem;
+    font-weight: 560;
+    max-width: 36ch;
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .demo :global(iframe) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+</style>

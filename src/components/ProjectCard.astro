@@ -1,0 +1,141 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Glyph from './Glyph.astro';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  size?: 'lg' | 'md';
+}
+const { project, size = 'md' } = Astro.props;
+const d = project.data;
+const href = `/projects/${project.id}/`;
+
+const statusLabel: Record<string, string | null> = {
+  published: null,
+  'under-review': 'under review',
+  ongoing: 'ongoing',
+  internship: 'internship',
+};
+const badges: { label: string; accent?: boolean }[] = [];
+if (d.demo?.live || d.links.demo) badges.push({ label: 'live demo', accent: true });
+else if (d.demo?.kind === 'youtube' || d.demo?.kind === 'video' || d.links.video) badges.push({ label: 'video' });
+if (d.links.code) badges.push({ label: 'code' });
+const status = statusLabel[d.status];
+const meta = d.venues.length ? d.venues.join(' · ') : String(d.year);
+---
+
+<article class={`card ${size}`}>
+  <a class="media" href={href} tabindex="-1" aria-hidden="true">
+    {
+      d.cover ? (
+        <img src={d.cover} alt="" loading="lazy" decoding="async" style={d.coverPosition ? `object-position:${d.coverPosition}` : undefined} />
+      ) : (
+        <Glyph seed={project.id} />
+      )
+    }
+  </a>
+  <div class="body">
+    <div class="meta mono">
+      <span>{meta}</span>
+      {status && <span class="status">{status}</span>}
+    </div>
+    <h3><a href={href}>{d.title}</a></h3>
+    <p>{d.summary}</p>
+    {
+      badges.length > 0 && (
+        <div class="badges">
+          {badges.map((b) => (
+            <span class={b.accent ? 'chip accent' : 'chip'}>
+              {b.accent && <span class="dot" />}
+              {b.label}
+            </span>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-elev);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: border-color 160ms ease, transform 160ms ease;
+  }
+  .card:hover {
+    border-color: var(--border-strong);
+  }
+  .card:focus-within {
+    border-color: var(--accent-line);
+  }
+  .media {
+    display: block;
+    aspect-ratio: 16 / 9;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    overflow: hidden;
+  }
+  .media :global(img),
+  .media :global(svg) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 400ms ease;
+  }
+  .card:hover .media :global(img),
+  .card:hover .media :global(svg) {
+    transform: scale(1.015);
+  }
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.05rem 1.15rem 1.2rem;
+    flex: 1;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 0.75rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+    color: var(--text-muted);
+  }
+  .status {
+    color: var(--accent);
+  }
+  h3 {
+    font-size: 1.08rem;
+    font-weight: 580;
+  }
+  .lg h3 {
+    font-size: 1.2rem;
+  }
+  h3 a {
+    text-decoration: none;
+  }
+  /* whole card clickable */
+  h3 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  p {
+    color: var(--text-muted);
+    font-size: 0.93rem;
+    line-height: 1.55;
+  }
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: auto;
+    padding-top: 0.4rem;
+  }
+</style>

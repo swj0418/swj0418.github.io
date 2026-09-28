@@ -1,0 +1,76 @@
+---
+// Inline, interactive Vega-Lite chart for project pages and notes (MDX).
+//   import VegaLite from '../../components/VegaLite.astro';
+//   <VegaLite spec={{ ... }} caption="..." />            // inline spec
+//   <VegaLite specUrl="/data/my-spec.json" />              // spec file in /public
+// Vega is loaded on demand only on pages that use this component.
+interface Props {
+  spec?: Record<string, unknown>;
+  specUrl?: string;
+  caption?: string;
+  height?: number;
+}
+const { spec, specUrl, caption, height = 320 } = Astro.props;
+---
+
+<figure class="vl">
+  <div class="vl-chart" data-spec={spec ? JSON.stringify(spec) : undefined} data-spec-url={specUrl} style={`min-height:${height}px`}>
+    <span class="loading mono">loading chart…</span>
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<script>
+  const els = document.querySelectorAll<HTMLElement>('.vl-chart');
+  if (els.length) {
+    const { default: embed } = await import('vega-embed');
+    const css = getComputedStyle(document.documentElement);
+    const v = (n: string) => css.getPropertyValue(n).trim();
+    const config = {
+      background: 'transparent',
+      font: v('--font-sans'),
+      axis: { labelColor: v('--text-muted'), titleColor: v('--text-muted'), gridColor: v('--border'), domainColor: v('--border-strong'), tickColor: v('--border-strong') },
+      legend: { labelColor: v('--text-muted'), titleColor: v('--text-muted') },
+      title: { color: v('--text') },
+      view: { stroke: 'transparent' },
+      range: { category: [v('--accent'), '#8fa7ff', '#f2b36f', '#e58fb4', '#b7c36b', '#9aa0a8'] },
+      mark: { color: v('--accent') },
+    };
+    for (const el of els) {
+      let spec = el.dataset.spec ? JSON.parse(el.dataset.spec) : el.dataset.specUrl!;
+      if (typeof spec === 'object' && spec.width === undefined) spec = { ...spec, width: 'container' };
+      el.replaceChildren();
+      await embed(el, spec, { actions: { export: true, source: true, compiled: false, editor: true }, config }).catch((err) => {
+        el.textContent = 'Chart failed to load.';
+        console.error(err);
+      });
+    }
+  }
+</script>
+
+<style>
+  .vl {
+    margin: 2rem 0;
+  }
+  .vl-chart {
+    width: 100%;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    background: var(--bg-elev);
+  }
+  .vl-chart :global(.vega-embed) {
+    width: 100%;
+  }
+  .loading {
+    font-size: 0.75rem;
+    color: var(--text-faint);
+  }
+  figcaption {
+    margin-top: 0.7rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+</style>

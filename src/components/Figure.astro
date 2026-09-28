@@ -1,0 +1,42 @@
+---
+// Usage in MDX: <Figure src="/images/x.jpg" alt="..." caption="..." wide />
+interface Props {
+  src: string;
+  alt: string;
+  caption?: string;
+  wide?: boolean;
+  width?: number;
+  height?: number;
+}
+const { src, alt, caption, wide = false, width, height } = Astro.props;
+---
+
+<figure class:list={['fig', { wide }]}>
+  <a href={src} class="frame" aria-label={`Open full-size image: ${alt}`}>
+    <img src={src} alt={alt} loading="lazy" decoding="async" width={width} height={height} />
+  </a>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .fig {
+    margin: 2rem 0;
+  }
+  .frame {
+    display: block;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: #fff;
+  }
+  .frame img {
+    width: 100%;
+    height: auto;
+  }
+  figcaption {
+    margin-top: 0.7rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+</style>

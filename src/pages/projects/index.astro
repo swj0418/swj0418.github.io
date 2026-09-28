@@ -1,0 +1,98 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { themes } from '../../config';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<Base title="Projects" description="Research projects and systems by Sangwon Jeong, grouped by theme.">
+  <header class="page-head wrap">
+    <p class="eyebrow">Projects</p>
+    <h1>Systems & research</h1>
+    <p class="lede">
+      Methods and interactive systems for understanding generative models and LLMs. Where possible, each project has a
+      live demo or video you can try directly.
+    </p>
+    <nav class="jump mono" aria-label="Themes">
+      {themes.map((t, i) => <a href={`#${t.id}`}>0{i + 1} {t.title}</a>)}
+    </nav>
+  </header>
+
+  {
+    themes.map((t, i) => {
+      const list = projects.filter((p) => p.data.theme === t.id);
+      return (
+        <section class="section wrap" id={t.id}>
+          <div class="theme-head">
+            <span class="idx mono">0{i + 1}</span>
+            <div>
+              <h2>{t.title}</h2>
+              <p>{t.blurb}</p>
+            </div>
+          </div>
+          <div class="grid">
+            {list.map((p) => (
+              <ProjectCard project={p} />
+            ))}
+          </div>
+        </section>
+      );
+    })
+  }
+</Base>
+
+<style>
+  .jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    margin-top: 1.5rem;
+    font-size: 0.78rem;
+  }
+  .jump a {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+  .jump a:hover {
+    color: var(--accent-strong);
+  }
+  .theme-head {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .idx {
+    font-size: 0.8rem;
+    color: var(--accent);
+    padding-top: 0.3rem;
+  }
+  .theme-head h2 {
+    font-size: var(--step-2);
+  }
+  .theme-head p {
+    color: var(--text-muted);
+    margin-top: 0.35rem;
+    max-width: 62ch;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.1rem;
+  }
+  @media (max-width: 960px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 620px) {
+    .grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .theme-head {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>
