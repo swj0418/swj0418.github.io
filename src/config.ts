@@ -28,7 +28,7 @@ export const site = {
 
   email: 'sangwon.jeong@yahoo.com',
   links: {
-    scholar: 'https://scholar.google.com/citations?user=PS_CX0AAAAAJ',
+    scholar: 'https://scholar.google.com/citations?user=LXQm0kYAAAAJ',
     github: 'https://github.com/swj0418',
     linkedin: 'https://www.linkedin.com/in/top1jeong/',
     cv: '/cv.pdf',
