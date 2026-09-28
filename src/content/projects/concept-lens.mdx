@@ -10,6 +10,7 @@ order: 1
 cover: /images/projects/concept-lens.jpg
 coverAlt: Concept Lens interface — a concept hierarchy along the top, a code hierarchy on the left, and a grid of edited tiger images.
 coverPosition: 0% 0%
+coverCaption: (A) concept hierarchy, (B) code hierarchy, (C) image grid for the selected codes × concepts. Node color encodes edit magnitude and inconsistency.
 links:
   code: https://github.com/swj0418/concept-lens
   video: https://www.youtube.com/watch?v=vGjovECYL2U
@@ -18,8 +19,6 @@ demo:
   src: vGjovECYL2U
   title: Concept Lens — IEEE VIS 2023 presentation
 ---
-
-import Figure from '../../components/Figure.astro';
 
 ## The problem
 
@@ -34,8 +33,6 @@ Concept Lens pairs two hierarchies with an image grid:
 - **A grid** of generated images for any selected codes (rows) × concepts (columns).
 
 Hierarchy nodes encode the **consistency** and **magnitude** of each edit, so directions that act uniformly stand apart from ones whose effect depends on the input. Brushing a subset of codes and re-clustering the concept hierarchy surfaces edits that are consistent for that subset.
-
-<Figure src="/images/projects/concept-lens.jpg" alt="Concept Lens overview with concept hierarchy (A), code hierarchy (B), and image grid (C)." caption="(A) concept hierarchy, (B) code hierarchy, (C) image grid for the selected codes × concepts. Node color encodes edit magnitude and inconsistency." />
 
 ## An example
 

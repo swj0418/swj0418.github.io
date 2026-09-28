@@ -27,7 +27,9 @@ const meta = d.venues.length ? d.venues.join(' · ') : String(d.year);
 <article class={`card ${size}`}>
   <a class="media" href={href} tabindex="-1" aria-hidden="true">
     {
-      d.cover ? (
+      d.thumb ? (
+        <img src={d.thumb} alt="" loading="lazy" decoding="async" />
+      ) : d.cover ? (
         <img src={d.cover} alt="" loading="lazy" decoding="async" style={d.coverPosition ? `object-position:${d.coverPosition}` : undefined} />
       ) : (
         <Glyph seed={project.id} />

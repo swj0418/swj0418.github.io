@@ -116,7 +116,7 @@ export const publications: Publication[] = [
     project: 'disentanglement',
     links: {
       doi: 'https://doi.org/10.1111/cgf.14524',
-      demo: 'https://observablehq.com/@swj0418/slow-walker',
+      demo: 'https://old.observablehq.com/@swj0418/eurovis-2022',
     },
   },
   {

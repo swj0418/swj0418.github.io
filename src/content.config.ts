@@ -29,6 +29,8 @@ const projects = defineCollection({
     cover: z.string().optional(),
     coverAlt: z.string().optional(),
     coverPosition: z.string().optional(), // CSS object-position for card crops
+    coverCaption: z.string().optional(), // caption under the image on the project page
+    thumb: z.string().optional(), // optional 16:9 card image; defaults to `cover`
     links: z
       .object({
         paper: z.string().optional(),

@@ -33,6 +33,10 @@ const linkDefs: [keyof typeof d.links, string][] = [
   ['video', 'Video'],
 ];
 const links = linkDefs.filter(([k]) => d.links[k]).map(([k, label]) => ({ label, href: d.links[k]!, primary: k === 'demo' }));
+// Hero: an interactive demo leads when there is one; otherwise the teaser image.
+// A video demo then moves below the write-up.
+const heroIsDemo = !!d.demo && (!!d.demo.live || !d.cover);
+const videoBelow = !!d.demo && !heroIsDemo;
 const statusText: Record<string, string> = {
   published: 'Published',
   'under-review': 'Under review',
@@ -65,7 +69,16 @@ const statusText: Record<string, string> = {
     {
       (d.demo || d.cover) && (
         <div class="wrap media">
-          {d.demo ? <Demo demo={d.demo} fallbackTitle={d.title} /> : <img class="cover" src={d.cover} alt={d.coverAlt ?? ''} />}
+          {heroIsDemo ? (
+            <Demo demo={d.demo!} fallbackTitle={d.title} />
+          ) : (
+            <figure class="hero-fig">
+              <a href={d.cover} aria-label="Open full-size image">
+                <img class="cover" src={d.cover} alt={d.coverAlt ?? ''} />
+              </a>
+              {d.coverCaption && <figcaption>{d.coverCaption}</figcaption>}
+            </figure>
+          )}
         </div>
       )
     }
@@ -83,6 +96,15 @@ const statusText: Record<string, string> = {
         </dl>
       </aside>
     </div>
+
+    {
+      videoBelow && (
+        <section class="wrap watch">
+          <h2 class="eyebrow">Video</h2>
+          <Demo demo={d.demo!} fallbackTitle={d.title} />
+        </section>
+      )
+    }
 
     {
       pubs.length > 0 && (
@@ -135,13 +157,38 @@ const statusText: Record<string, string> = {
   .media {
     margin-bottom: clamp(2rem, 5vw, 3rem);
   }
-  .cover {
-    width: 100%;
-    max-height: 70vh;
-    object-fit: contain;
-    background: #fff;
+  .hero-fig {
+    margin: 0;
+  }
+  .hero-fig a {
+    display: block;
     border: 1px solid var(--border);
     border-radius: var(--radius);
+    overflow: hidden;
+    background: #fff;
+  }
+  .cover {
+    width: 100%;
+    max-height: 72vh;
+    object-fit: contain;
+    background: #fff;
+  }
+  .hero-fig figcaption {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+    max-width: 90ch;
+  }
+  .watch {
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+  }
+  .watch h2 {
+    margin-bottom: 1rem;
+  }
+  .watch :global(.yt),
+  .watch :global(.dv) {
+    max-width: 860px;
   }
   .layout {
     padding-top: 0.5rem;
